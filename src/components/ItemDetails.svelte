@@ -61,7 +61,7 @@
 
         <div class="space-y-2">
           <Button 
-            class="w-full bg-[#684D7D] hover:bg-[#4D3960] text-white h-12"
+            class="w-full bg-[#2F5233] hover:bg-[#234024] text-white h-12"
             on:click={handleEdit}
           >
             <Edit class="h-4 w-4 mr-2" />
@@ -76,7 +76,7 @@
               Add Item
             </Button>
             <Button 
-              class="bg-[#684D7D] hover:bg-[#4D3960] text-white h-12"
+              class="bg-[#2F5233] hover:bg-[#234024] text-white h-12"
               on:click={() => {}}
             >
               <Map class="h-4 w-4 mr-2" />
