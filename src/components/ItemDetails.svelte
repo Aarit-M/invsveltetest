@@ -25,7 +25,7 @@
 <Drawer.Root bind:open={show} side="right">
   <Drawer.Portal>
     <Drawer.Overlay class="fixed inset-0 bg-black/40" />
-    <Drawer.Content class="bg-background fixed bottom-0 right-0 top-0 flex h-full w-[400px] flex-col">
+    <Drawer.Content class="bg-background fixed bottom-0 right-0 top-0 flex h-full w-[400px] flex-col shadow-lg transition-transform duration-300 ease-in-out data-[state=open]:translate-x-0 data-[state=closed]:translate-x-full">
       <div class="flex-1 overflow-y-auto p-4">
         <div class="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8" />
         <div class="max-w-md mx-auto">
