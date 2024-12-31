@@ -41,14 +41,14 @@
   }
 </script>
 
-<Drawer.Root bind:open={show}>
+<Drawer.Root bind:open={show} direction="right">
   <Drawer.Portal>
     <Drawer.Overlay class="fixed inset-0 bg-black/40" />
     <Drawer.Content 
-      class="fixed right-0 top-0 h-full w-[400px] bg-white dark:bg-black transform transition-transform duration-300 ease-in-out data-[state=open]:translate-x-0 data-[state=closed]:translate-x-full"
+      class="fixed top-0 right-0 h-full w-[400px] bg-white dark:bg-black transform transition-transform duration-300 ease-in-out data-[state=open]:translate-x-0 data-[state=closed]:translate-x-full"
     >
       <div class="flex flex-col h-full p-6">
-        <div class="flex justify-end mb-6">
+        <div class="flex justify-end mt-10">
           <button 
             class="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-white/10"
             on:click={onClose}
