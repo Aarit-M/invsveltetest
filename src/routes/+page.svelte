@@ -14,20 +14,17 @@
       { id: '3', title: 'Screwdriver Set', location: 'Drawer B2' },
     ];
     
-    let filteredItems = items;
+    $: filteredItems = items.filter(item => 
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.location.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  
     let selectedItem = null;
     let showAddDrawer = false;
     let showItemDetails = false;
     let showMap = false;
   
-    $: {
-      filteredItems = items.filter(item => 
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-  
-    function handleSearch(event: CustomEvent<string>) {
+    function handleSearch(event) {
       searchQuery = event.detail;
     }
   
@@ -45,12 +42,15 @@
       showAddDrawer = false;
     }
   
-    function handleViewMap() {
-      showMap = true;
+    function toggleAddDrawer() {
+      showAddDrawer = !showAddDrawer;
+    }
+  
+    function toggleMap() {
+      showMap = !showMap;
     }
   
     onMount(() => {
-      // Ensure dark mode is properly initialized
       const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
       document.documentElement.classList.toggle('dark', isDarkMode);
     });
@@ -76,7 +76,7 @@
     <div class="fixed bottom-6 left-1/2 -translate-x-1/2 flex gap-4">
       <button
         class="flex items-center gap-2 px-6 py-3 bg-[#2F5233] hover:bg-[#234024] text-white rounded-full transition-colors shadow-lg"
-        on:click={() => showAddDrawer = true}
+        on:click={toggleAddDrawer}
       >
         <Plus class="h-5 w-5" />
         Add Item
@@ -84,7 +84,7 @@
       
       <button
         class="flex items-center gap-2 px-6 py-3 bg-[#2F5233] hover:bg-[#234024] text-white rounded-full transition-colors shadow-lg"
-        on:click={handleViewMap}
+        on:click={toggleMap}
       >
         <Map class="h-5 w-5" />
         View Map
@@ -94,7 +94,7 @@
     <AddItemDrawer
       bind:showAddDrawer
       onClose={() => showAddDrawer = false}
-      {handleAddItem}
+      onSubmit={handleAddItem}
     />
   
     {#if selectedItem}
