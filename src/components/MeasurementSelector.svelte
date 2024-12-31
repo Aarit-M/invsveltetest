@@ -1,4 +1,3 @@
-<!-- MeasurementSelector.svelte -->
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { Select } from "../components/ui/select";
