@@ -1,102 +1,85 @@
 <script lang="ts">
-    import { X, Camera } from "lucide-svelte";
-    import { Button } from "../components/ui/button";
-    import { fade, slide } from 'svelte/transition';
-  
-    export let showAddDrawer = false;
-    export let onClose: () => void;
-    export let onSubmit: (item: any) => void;
-  
-    let title = '';
-    let description = '';
-    let location = '';
-    let hasStandardMeasurements = false;
-  
-    function handleSubmit() {
-      if (!title || !location) return;
-      
-      onSubmit({
-        title,
-        description,
-        location,
-        hasStandardMeasurements
-      });
-      
-      resetForm();
-    }
-  
-    function resetForm() {
-      title = '';
-      description = '';
-      location = '';
-      hasStandardMeasurements = false;
-    }
-  </script>
-  
-  {#if showAddDrawer}
-  <div 
-    class="fixed inset-0 bg-black/50 z-50"
-    transition:fade
-  >
-    <div 
-      class="fixed top-0 left-0 right-0 bg-background slide-in-from-top"
-    >
-      <div class="container mx-auto px-4">
-        <div class="flex items-center justify-between h-14">
-          <h2 class="text-xl font-semibold">Add New Item</h2>
-          <button 
-            class="text-muted-foreground hover:text-foreground rounded-full p-2"
-            on:click={onClose}
-          >
-            <X class="h-6 w-6" />
-          </button>
-        </div>
-  
-        <div class="space-y-6 py-6">
-          <input
-            type="text"
-            bind:value={title}
-            placeholder="Enter Title"
-            class="w-full p-3 bg-muted border border-input rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-          />
-  
-          <textarea
-            bind:value={description}
-            placeholder="Enter Description"
-            class="w-full h-32 p-3 bg-muted border border-input rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary resize-none"
-          ></textarea>
-  
-          <label class="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              bind:checked={hasStandardMeasurements}
-              class="rounded-lg border-input bg-muted text-primary focus:ring-primary"
-            />
-            <span class="text-sm">Does this item have standard measurements?</span>
-          </label>
-  
-          <div class="relative">
-            <input
-              type="text"
-              bind:value={location}
-              placeholder="Location"
-              class="w-full p-3 pr-12 bg-muted border border-input rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-            />
-            <button 
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground rounded-full p-1"
-            >
-              <Camera class="h-5 w-5" />
-            </button>
-          </div>
-  
-          <button
-            class="w-full py-3 bg-[#2F5233] hover:bg-[#234024] text-white rounded-xl transition-colors"
-            on:click={handleSubmit}
-          >
-            Add Item
-          </button>
+  import { Button } from "../components/ui/button";
+  import { Input } from "../components/ui/input";
+  import { Label } from "../components/ui/label";
+  import { Textarea } from "../components/ui/textarea";
+  import { Drawer } from "vaul-svelte";
+  import { createEventDispatcher } from 'svelte';
+  import MeasurementSelector from "./MeasurementSelector.svelte";
+
+  export let showAddDrawer = false;
+  export let onClose: () => void;
+  export let onSubmit: (item: any) => void;
+
+  let title = '';
+  let description = '';
+  let location = '';
+  let hasStandardMeasurements = false;
+  let measurements = {};
+
+  const dispatch = createEventDispatcher();
+
+  function handleSubmit() {
+    const newItem = {
+      title,
+      description,
+      location,
+      measurements: hasStandardMeasurements ? measurements : null
+    };
+    onSubmit(newItem);
+    resetForm();
+  }
+
+  function resetForm() {
+    title = '';
+    description = '';
+    location = '';
+    hasStandardMeasurements = false;
+    measurements = {};
+  }
+
+  function handleMeasurementsChange(event) {
+    measurements = event.detail;
+  }
+</script>
+
+<Drawer.Root bind:open={showAddDrawer}>
+  <Drawer.Portal>
+    <Drawer.Overlay class="fixed inset-0 bg-black/40" />
+    <Drawer.Content class="bg-background fixed bottom-0 left-0 right-0 mt-24 flex h-[96%] flex-col rounded-t-[10px]">
+      <div class="flex-1 overflow-y-auto p-4">
+        <div class="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8" />
+        <div class="max-w-md mx-auto">
+          <h2 class="text-lg font-semibold mb-4">Add New Item</h2>
+          <form on:submit|preventDefault={handleSubmit} class="space-y-4">
+            <div>
+              <Label for="title">Title</Label>
+              <Input type="text" id="title" bind:value={title} required />
+            </div>
+            <div>
+              <Label for="description">Description</Label>
+              <Textarea id="description" bind:value={description} />
+            </div>
+            <div>
+              <Label for="location">Location</Label>
+              <Input type="text" id="location" bind:value={location} required />
+            </div>
+            <div>
+              <Label>
+                <input type="checkbox" bind:checked={hasStandardMeasurements} />
+                Does this item have any standard measurements?
+              </Label>
+            </div>
+            {#if hasStandardMeasurements}
+              <MeasurementSelector {title} on:change={handleMeasurementsChange} />
+            {/if}
+            <div class="flex justify-end space-x-2">
+              <Button variant="outline" on:click={onClose}>Cancel</Button>
+              <Button type="submit">Add Item</Button>
+            </div>
+          </form>
         </div>
       </div>
-    </div>
-  </div>
-  {/if}
+    </Drawer.Content>
+  </Drawer.Portal>
+</Drawer.Root>

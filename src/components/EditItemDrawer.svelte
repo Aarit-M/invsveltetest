@@ -1,105 +1,74 @@
 <script lang="ts">
-    import { X } from 'lucide-svelte';
-    import { Button } from '../components/ui/button';
-    import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '../components/ui/drawer';
-    import ItemFormFields from './ItemFormFields.svelte';
-    import MeasurementSelector from './MeasurementSelector.svelte';
-    import LocationInput from './LocationInput.svelte';
-    import { createEventDispatcher } from 'svelte';
-  
-    const dispatch = createEventDispatcher();
-  
-    export let open = false;
-    export let initialData: {
-      id: string;
-      title: string;
-      description?: string;
-      location: string;
-      measurements?: {
-        type: string;
-        value: string;
-      };
-    } | null = null;
-  
-    const MEASUREMENT_TYPES = {
-      screws: ['M2', 'M3', 'M4', 'M5', 'M6'],
-      drills: ['12V', '18V', '20V'],
-      wrenches: ['6mm', '8mm', '10mm', '12mm', '14mm'],
+  import { Button } from "../components/ui/button";
+  import { Input } from "../components/ui/input";
+  import { Label } from "../components/ui/label";
+  import { Textarea } from "../components/ui/textarea";
+  import { Drawer } from "vaul-svelte";
+  import MeasurementSelector from "./MeasurementSelector.svelte";
+
+  export let showEditDrawer = false;
+  export let item: any;
+  export let onClose: () => void;
+  export let onSubmit: (item: any) => void;
+
+  let title = item.title;
+  let description = item.description || '';
+  let location = item.location;
+  let hasStandardMeasurements = !!item.measurements;
+  let measurements = item.measurements || {};
+
+  function handleSubmit() {
+    const updatedItem = {
+      title,
+      description,
+      location,
+      measurements: hasStandardMeasurements ? measurements : null
     };
-  
-    let title = initialData?.title ?? '';
-    let description = initialData?.description ?? '';
-    let location = initialData?.location ?? '';
-    let showScanner = false;
-    let hasStandardMeasurements = !!initialData?.measurements;
-    let measurementType = initialData?.measurements?.type ?? '';
-    let measurementValue = initialData?.measurements?.value ?? '';
-  
-    const getMeasurementTypes = (itemTitle: string) => {
-      const lowerTitle = itemTitle.toLowerCase();
-      if (lowerTitle.includes('screw')) return MEASUREMENT_TYPES.screws;
-      if (lowerTitle.includes('drill')) return MEASUREMENT_TYPES.drills;
-      if (lowerTitle.includes('wrench')) return MEASUREMENT_TYPES.wrenches;
-      return MEASUREMENT_TYPES.screws;
-    };
-  
-    const handleSubmit = () => {
-      if (!initialData) return;
-      dispatch('submit', {
-        id: initialData.id,
-        title,
-        description,
-        location,
-        measurements: hasStandardMeasurements ? {
-          type: measurementType,
-          value: measurementValue,
-        } : null,
-      });
-    };
-  
-    const handleQRScan = () => {
-      setTimeout(() => {
-        location = 'Cabinet B-2';
-        showScanner = false;
-      }, 1000);
-    };
-  </script>
-  
-  <Drawer {open} on:openChange={() => dispatch('close')}>
-    <DrawerContent class="h-[90vh]">
-      <DrawerHeader class="border-b pb-4">
-        <DrawerTitle>Edit Item</DrawerTitle>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          class="absolute right-4 top-4" 
-          on:click={() => dispatch('close')}
-        >
-          <X class="h-4 w-4" />
-        </Button>
-      </DrawerHeader>
-      <div class="p-6 space-y-6">
-        <ItemFormFields
-          bind:title
-          bind:description
-        />
-  
-        <MeasurementSelector
-          bind:hasStandardMeasurements
-          bind:measurementType
-          bind:measurementValue
-          availableMeasurementTypes={getMeasurementTypes(title)}
-        />
-  
-        <LocationInput
-          bind:location
-          bind:showScanner
-          onScanComplete={handleQRScan}
-        />
-  
-        <Button on:click={handleSubmit} class="w-full bg-primary">
-          Save Changes
-        </Button>
+    onSubmit(updatedItem);
+  }
+
+  function handleMeasurementsChange(event) {
+    measurements = event.detail;
+  }
+</script>
+
+<Drawer.Root bind:open={showEditDrawer}>
+  <Drawer.Portal>
+    <Drawer.Overlay class="fixed inset-0 bg-black/40" />
+    <Drawer.Content class="bg-background fixed bottom-0 left-0 right-0 mt-24 flex h-[96%] flex-col rounded-t-[10px]">
+      <div class="flex-1 overflow-y-auto p-4">
+        <div class="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8" />
+        <div class="max-w-md mx-auto">
+          <h2 class="text-lg font-semibold mb-4">Edit Item</h2>
+          <form on:submit|preventDefault={handleSubmit} class="space-y-4">
+            <div>
+              <Label for="title">Title</Label>
+              <Input type="text" id="title" bind:value={title} required />
+            </div>
+            <div>
+              <Label for="description">Description</Label>
+              <Textarea id="description" bind:value={description} />
+            </div>
+            <div>
+              <Label for="location">Location</Label>
+              <Input type="text" id="location" bind:value={location} required />
+            </div>
+            <div>
+              <Label>
+                <input type="checkbox" bind:checked={hasStandardMeasurements} />
+                Does this item have any standard measurements?
+              </Label>
+            </div>
+            {#if hasStandardMeasurements}
+              <MeasurementSelector title={title} on:change={handleMeasurementsChange} />
+            {/if}
+            <div class="flex justify-end space-x-2">
+              <Button variant="outline" on:click={onClose}>Cancel</Button>
+              <Button type="submit">Update Item</Button>
+            </div>
+          </form>
+        </div>
       </div>
-    </DrawerContent>
-  </Drawer>
+    </Drawer.Content>
+  </Drawer.Portal>
+</Drawer.Root>

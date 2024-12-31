@@ -32,6 +32,7 @@
 		"@melt-ui/svelte": "^0.76.3",
 		"lucide-svelte": "^0.294.0",
 		"mode-watcher": "^0.5.0",
-		"svelte-radix": "^0.5.0"
+		"svelte-radix": "^0.5.0",
+		"vaul-svelte": "^0.3.2"
 	}
 }
