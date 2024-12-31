@@ -16,6 +16,7 @@
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"autoprefixer": "^10.4.14",
+		"bits-ui": "^0.22.0",
 		"clsx": "^2.1.1",
 		"postcss": "^8.4.24",
 		"postcss-load-config": "^4.0.1",
@@ -29,7 +30,6 @@
 	},
 	"dependencies": {
 		"@melt-ui/svelte": "^0.76.3",
-		"bits-ui": "^0.22.0",
 		"lucide-svelte": "^0.294.0",
 		"mode-watcher": "^0.5.0",
 		"svelte-radix": "^0.5.0"

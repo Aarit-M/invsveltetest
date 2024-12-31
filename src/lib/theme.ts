@@ -1,18 +1,29 @@
 import { writable } from 'svelte/store';
 
-export const theme = writable<'light' | 'dark'>('light');
+function getInitialTheme(): 'light' | 'dark' {
+  if (typeof window === 'undefined') return 'light';
+  
+  const stored = localStorage.getItem('theme');
+  if (stored === 'light' || stored === 'dark') return stored;
+  
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
 
-export function toggleTheme() {
-  theme.update(current => {
-    const newTheme = current === 'light' ? 'dark' : 'light';
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-    return newTheme;
+function createThemeStore() {
+  const { subscribe, set, update } = writable<'light' | 'dark'>(getInitialTheme());
+
+  subscribe(value => {
+    if (typeof window !== 'undefined') {
+      document.documentElement.classList.toggle('dark', value === 'dark');
+      localStorage.setItem('theme', value);
+    }
   });
+
+  return {
+    subscribe,
+    set,
+    update
+  };
 }
 
-// Initialize theme based on system preference
-if (typeof window !== 'undefined') {
-  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  theme.set(systemTheme);
-  document.documentElement.classList.toggle('dark', systemTheme === 'dark');
-}
+export const theme = createThemeStore();
