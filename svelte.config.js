@@ -6,7 +6,9 @@ import { fileURLToPath } from 'url';
 const config = {
   kit: {
     adapter: adapter({
-      runtime: 'edge'
+      runtime: 'edge',
+      regions: ['iad1'],
+      split: false
     }),
     alias: {
       $lib: fileURLToPath(new URL('./src/lib', import.meta.url)),
