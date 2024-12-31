@@ -46,7 +46,7 @@
 <Drawer.Root bind:open={showAddDrawer}>
   <Drawer.Portal>
     <Drawer.Overlay class="fixed inset-0 bg-black/40" />
-    <Drawer.Content class="bg-background fixed bottom-0 left-0 right-0 flex h-[70%] flex-col rounded-t-[10px]">
+    <Drawer.Content class="bg-background fixed bottom-0 left-0 right-0 flex h-[90%] flex-col rounded-t-[10px]">
       <div class="flex-1 overflow-y-auto p-4">
         <div class="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8" />
         <div class="max-w-md mx-auto">
