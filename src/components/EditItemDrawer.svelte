@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { Button } from "../components/ui/button";
-  import { Input } from "../components/ui/input";
-  import { Label } from "../components/ui/label";
-  import { Textarea } from "../components/ui/textarea";
+  import { Button } from "$lib/components/ui/button";
+  import { Input } from "$lib/components/ui/input";
+  import { Label } from "$lib/components/ui/label";
+  import { Textarea } from "$lib/components/ui/textarea";
   import { Drawer } from "vaul-svelte";
   import MeasurementSelector from "./MeasurementSelector.svelte";
 
@@ -35,7 +35,7 @@
 <Drawer.Root bind:open={showEditDrawer}>
   <Drawer.Portal>
     <Drawer.Overlay class="fixed inset-0 bg-black/40" />
-    <Drawer.Content class="bg-background fixed bottom-0 left-0 right-0 mt-24 flex h-[96%] flex-col rounded-t-[10px]">
+    <Drawer.Content class="bg-background fixed bottom-0 left-0 right-0 flex h-[70%] flex-col rounded-t-[10px]">
       <div class="flex-1 overflow-y-auto p-4">
         <div class="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8" />
         <div class="max-w-md mx-auto">
