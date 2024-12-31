@@ -3,6 +3,8 @@
   import { Drawer } from "vaul-svelte";
   import { X, MapPin, Edit, Map, Plus } from 'lucide-svelte';
   import EditItemDrawer from "./EditItemDrawer.svelte";
+  import AddItemDrawer from "./AddItemDrawer.svelte";
+  import { createEventDispatcher } from 'svelte';
 
   export let show = false;
   export let item: any;
@@ -10,6 +12,10 @@
   export let onUpdate: (item: any) => void;
 
   let showEditDrawer = false;
+  let showAddDrawer = false;
+  let showMap = false;
+
+  const dispatch = createEventDispatcher();
 
   function handleEdit() {
     showEditDrawer = true;
@@ -19,6 +25,19 @@
     item = { ...item, ...updatedItem };
     onUpdate(item);
     showEditDrawer = false;
+  }
+
+  function handleAddItem() {
+    showAddDrawer = true;
+  }
+
+  function handleAddItemSubmit(newItem) {
+    dispatch('addItem', newItem);
+    showAddDrawer = false;
+  }
+
+  function handleShowMap() {
+    showMap = true;
   }
 </script>
 
@@ -61,7 +80,7 @@
 
         <div class="space-y-2">
           <Button 
-            class="w-full bg-[#2F5233] hover:bg-[#234024] text-white h-12"
+            class="w-full bg-[#684D7D] hover:bg-[#4D3960] text-white h-12"
             on:click={handleEdit}
           >
             <Edit class="h-4 w-4 mr-2" />
@@ -70,14 +89,14 @@
           <div class="grid grid-cols-2 gap-2">
             <Button 
               class="bg-[#2F5233] hover:bg-[#234024] text-white h-12"
-              on:click={() => {}}
+              on:click={handleAddItem}
             >
               <Plus class="h-4 w-4 mr-2" />
               Add Item
             </Button>
             <Button 
-              class="bg-[#2F5233] hover:bg-[#234024] text-white h-12"
-              on:click={() => {}}
+              class="bg-[#684D7D] hover:bg-[#4D3960] text-white h-12"
+              on:click={handleShowMap}
             >
               <Map class="h-4 w-4 mr-2" />
               Map
@@ -95,3 +114,24 @@
   onClose={() => showEditDrawer = false}
   onSubmit={handleEditSubmit}
 />
+
+<AddItemDrawer
+  bind:showAddDrawer
+  onClose={() => showAddDrawer = false}
+  onSubmit={handleAddItemSubmit}
+/>
+
+{#if showMap}
+  <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl max-w-md w-full">
+      <h2 class="text-xl font-semibold mb-4">Map View</h2>
+      <p class="text-gray-600 dark:text-gray-300">Map placeholder for {item.title}</p>
+      <Button 
+        class="mt-4 w-full bg-[#684D7D] hover:bg-[#4D3960] text-white"
+        on:click={() => showMap = false}
+      >
+        Close Map
+      </Button>
+    </div>
+  </div>
+{/if}

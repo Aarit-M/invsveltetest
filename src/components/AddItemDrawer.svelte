@@ -47,8 +47,8 @@
 <Drawer.Root bind:open={showAddDrawer}>
   <Drawer.Portal>
     <Drawer.Overlay class="fixed inset-0 bg-black/40" />
-    <Drawer.Content class="fixed inset-x-0 bottom-0 mt-24 bg-white dark:bg-black rounded-t-[10px]">
-      <div class="flex-1 p-4">
+    <Drawer.Content class="fixed inset-x-0 bottom-0 h-[90%] bg-white dark:bg-black rounded-t-[10px]">
+      <div class="flex-1 overflow-y-auto p-4 h-full">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-xl font-semibold">Add New Item</h2>
           <button 
