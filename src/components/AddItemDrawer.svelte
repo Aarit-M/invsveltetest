@@ -46,41 +46,40 @@
 
 <Drawer.Root bind:open={showAddDrawer}>
   <Drawer.Portal>
-    <Drawer.Content class="bg-[#121212] fixed bottom-0 left-0 right-0 flex h-[85%] flex-col rounded-t-[10px] border-t border-zinc-800">
-      <div class="flex items-center justify-between p-4 border-b border-zinc-800">
-        <h2 class="text-xl font-semibold text-white">Add New Item</h2>
-        <button 
-          class="rounded-full p-2 hover:bg-zinc-800 transition-colors"
-          on:click={onClose}
-        >
-          <X class="h-5 w-5 text-zinc-400" />
-        </button>
-      </div>
-      <div class="flex-1 overflow-y-auto p-4">
-        <form on:submit|preventDefault={handleSubmit} class="space-y-6">
-          <div>
+    <Drawer.Overlay class="fixed inset-0 bg-black/40" />
+    <Drawer.Content class="fixed inset-x-0 bottom-0 mt-24 bg-[#121212] rounded-t-[10px]">
+      <div class="flex-1 p-4">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl font-semibold text-white">Add New Item</h2>
+          <button 
+            class="rounded-full p-2 hover:bg-white/10"
+            on:click={onClose}
+          >
+            <X class="h-5 w-5" />
+          </button>
+        </div>
+        <form on:submit|preventDefault={handleSubmit} class="space-y-4">
+          <div class="space-y-2">
             <Input 
               type="text" 
-              id="title" 
+              placeholder="Enter Title" 
+              class="bg-transparent border-0 border-b border-white/20 rounded-none px-0 h-12 text-white placeholder:text-white/50"
               bind:value={title} 
               required 
-              placeholder="Enter Title"
-              class="bg-transparent border-zinc-800 text-white placeholder:text-zinc-500"
             />
           </div>
-          <div>
+          <div class="space-y-2">
             <Textarea 
-              id="description" 
+              placeholder="Enter Description" 
+              class="bg-transparent border-0 border-b border-white/20 rounded-none px-0 min-h-[100px] text-white placeholder:text-white/50"
               bind:value={description} 
-              placeholder="Enter Description"
-              class="bg-transparent border-zinc-800 text-white placeholder:text-zinc-500 min-h-[100px]"
             />
           </div>
-          <label class="flex items-center gap-2 text-zinc-300">
+          <label class="flex items-center gap-2 text-white/80">
             <input 
               type="checkbox" 
               bind:checked={hasStandardMeasurements}
-              class="rounded border-zinc-800 bg-transparent"
+              class="rounded border-white/20"
             />
             Does this item have standard measurements?
           </label>
@@ -90,28 +89,21 @@
           <div class="relative">
             <Input 
               type="text" 
-              id="location" 
+              placeholder="Location" 
+              class="bg-transparent border-0 border-b border-white/20 rounded-none px-0 h-12 text-white placeholder:text-white/50 pr-10"
               bind:value={location} 
-              required
-              placeholder="Location"
-              class="bg-transparent border-zinc-800 text-white placeholder:text-zinc-500 pr-10"
+              required 
             />
-            <button 
-              type="button" 
-              class="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-300"
+            <Camera class="absolute right-0 top-1/2 -translate-y-1/2 h-5 w-5 text-white/50" />
+          </div>
+          <div class="pt-4">
+            <Button 
+              type="submit" 
+              class="w-full bg-[#2F5233] hover:bg-[#234024] text-white h-12"
             >
-              <Camera class="h-5 w-5" />
-            </button>
+              Add Item
+            </Button>
           </div>
-          <div class="text-sm text-zinc-500">
-            Click the camera button and scan a new QR code to enter a new location
-          </div>
-          <Button 
-            type="submit"
-            class="w-full bg-[#2F5233] hover:bg-[#234024] text-white"
-          >
-            Add Item
-          </Button>
         </form>
       </div>
     </Drawer.Content>
