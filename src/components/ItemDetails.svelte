@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button";
+  import { Button } from "../components/ui/button";
   import { Drawer } from "vaul-svelte";
   import ItemActions from "./ItemActions.svelte";
   import EditItemDrawer from "./EditItemDrawer.svelte";
@@ -25,7 +25,7 @@
 <Drawer.Root bind:open={show} side="right">
   <Drawer.Portal>
     <Drawer.Overlay class="fixed inset-0 bg-black/40" />
-    <Drawer.Content class="bg-background fixed bottom-0 right-0 top-0 flex h-full w-[400px] flex-col rounded-l-[10px]">
+    <Drawer.Content class="bg-background fixed bottom-0 right-0 top-0 flex h-full w-[400px] flex-col">
       <div class="flex-1 overflow-y-auto p-4">
         <div class="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8" />
         <div class="max-w-md mx-auto">
